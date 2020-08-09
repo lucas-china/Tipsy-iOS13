@@ -15,16 +15,21 @@ class ResultsViewController: UIViewController {
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var settingsLabel: UILabel!
     
+    // MARK: - Atributos
+    var total: String?
+    var people: String?
+    var tip: String?
+    
     // MARK: - View life cycles
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        totalLabel.text = total
+        settingsLabel.text = "Split between \(people ?? "0") people, with \(tip ?? "0")% tip."
     }
     
     @IBAction func recalculatePressed(_ sender: UIButton) {
-        
+        dismiss(animated: true)
     }
 
 }

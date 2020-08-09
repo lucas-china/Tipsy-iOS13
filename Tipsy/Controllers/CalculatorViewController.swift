@@ -21,7 +21,8 @@ class CalculatorViewController: UIViewController {
     
     // MARK: Atributos
     var percentSelect = 0.0
-    var steppValue = 0
+    var numberOfPeople = 2
+    var billTotalString: String?
     
     // MARK: - IBAction
     
@@ -40,22 +41,29 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
-        steppValue = Int(sender.value)
-        splitNumberLabel.text = String(steppValue)
+        numberOfPeople = Int(sender.value)
+        splitNumberLabel.text = String(numberOfPeople)
     }
     
     @IBAction func calculatePressed(_ sender: UIButton) {
         guard let bill = Double(billtextField.text ?? "0.0") else { return }
         let tip = percentSelect * bill
-        let billTotal = (tip + bill) / Double(steppValue)
+        let billTotal = (tip + bill) / Double(numberOfPeople)
         
         print(String(format: "%.2f", billTotal))
+        billTotalString = String(billTotal)
+        performSegue(withIdentifier: "resultSegue", sender: nil)
     }
     
     // MARK: - Functions
     
-    private func calculate() {
-        
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "resultSegue" {
+            guard let resultVC = segue.destination as? ResultsViewController else { return }
+            resultVC.total = billTotalString
+            resultVC.people = String(numberOfPeople)
+            resultVC.tip = String(percentSelect * 100)
+        }
     }
     
     private func percentStringToDouble(percent: String) -> Double {
